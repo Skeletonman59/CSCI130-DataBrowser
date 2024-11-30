@@ -59,9 +59,41 @@
 			let insertToggle = 0;
 
 			function startFunc() {
-				GetData(iterator); //we want to see the first elem in array
-				GetMaximum();
+				//GetData(iterator); //we want to see the first elem in array
+				//GetMaximum();
+				init_db_table();
+				GetData(iterator);
 			}
+			function init_db_table() {
+				httpRequest = new XMLHttpRequest();
+				if (!httpRequest) { // check if the object was properly created
+					// issues with the browser, example: old browser
+					alert('Cannot create an XMLHTTP instance');
+					return false;
+				}
+				httpRequest.onreadystatechange = DBconfirmed; // we assign a function to the property onreadystatechange (callback function)
+				httpRequest.open('POST', 'initialize_db_table.php'); // ACTION + (string containing address of the file + parameters if needed)
+				httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				httpRequest.send();
+			}
+			function DBconfirmed() {
+				try {
+					if (httpRequest.readyState === XMLHttpRequest.DONE) {
+						if (httpRequest.status === 200) {
+							//What we want to do: 
+							//Change the form's data to view what we want to see.
+							//Updates: everything in first box, Page number.
+							//alert("Response Text: " + httpRequest.responseText);
+							alert('I wonder if the database was created...');
+						} else {
+							alert('There was a problem with the request.');
+						}
+					}
+				} catch (e) { // Always deal with what can happen badly, client-server applications --> there is always something that can go wrong on one end of the connection
+					alert('Caught Exception: ' + e.description);
+				}
+			}
+			/*
 			function GetMaximum() {
 				httpRequestMax = new XMLHttpRequest();
 				if (!httpRequest) { // check if the object was properly created
@@ -106,6 +138,7 @@
 					GetData(iterator);
 				}
 			}
+			*/
 			function GetData(i) {
 				iterator = i; //just in case we get sent to 0, end
 				httpRequest = new XMLHttpRequest();
@@ -148,7 +181,7 @@
 					alert('Caught Exception: ' + e.description);
 				}
 			}
-			
+			/*
 			function GetInsert() {
 				//the only thing this function will do, is change all elements to no longer be readonly.
 				//It will:
@@ -365,6 +398,7 @@
 					alert('Caught Exception: ' + e.description);
 				}
 			}
+			*/
 			//lines below, make the page number textbox have input functionality.
 			document.getElementById("moveTo").onkeydown = function(e) {
 				if(e.code === "Enter") {

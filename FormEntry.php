@@ -1,7 +1,6 @@
 <?php
 // CSci 130 - Web Programming
 
-	//TODO: replace all php functions, save entries into a class, send to db
 	function generateRandomString($length = 10) {
 		// list of characters that can be present in the string
 		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -14,14 +13,23 @@
 	}
 
 	// Class for the form Entry,
-	abstract class Entry {
-		
+	class Entry {
 		private $sel;
 		private $title;
 		private $artist;
 		private $top_genre;
 		private $year;
 		private $added;
+		
+		function __construct() {
+			$this->SetSel(strval(rand(0,10000)));
+			$this->SetTitle(generateRandomString());
+			$this->SetArtist(generateRandomString());
+			$this->SetTopGenre(generateRandomString());
+			$this->SetYear(strval(rand(1800,2024)));
+			$this->SetAdded(strval(rand(2008,2024)));
+			
+		}
 		
 		public function GetSel() { return $this->sel; }
 		public function GetTitle() { return $this->title; }
