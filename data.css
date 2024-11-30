@@ -1,0 +1,51 @@
+caption {
+	/*font-size: 12px;*/
+	font-family: Arial, Helvetica, sans-serif;
+}
+#songElem, #menu, #modifyForm {
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid black;
+}
+#songElem {
+	display: grid;
+	grid-template-columns: min-content min-content;
+    grid-gap:5px;
+    width: 25%;
+	text-align: center;
+}
+#menu {
+	display: grid;
+	grid-auto-rows: auto;
+	grid-template-columns: repeat(auto-fill, 20%);
+    gap:10px;
+    width: 15%;
+}
+#navbar {
+	display: flex;
+	position: relative;
+	margin: auto auto;
+	align-items: center;
+	padding: 10px;
+	border: 1px solid black;
+}
+
+#modifyForm {
+	display: grid;
+	grid-auto-rows: auto;
+	grid-template-columns: repeat(auto-fill, 15%);
+	gap: 20px;
+	width: 30%;
+	
+}
+
+#moveTo {
+	width:25px;
+}
+
+#maxElements {
+	width:25px;
+}
