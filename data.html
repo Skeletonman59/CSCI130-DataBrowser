@@ -16,25 +16,50 @@
 		</table>
 		<form id="page">
 			<div id="songElem">
-				<label for="string1">Title: </label>
-				<input type="text" id="string1" readonly>
-				<label for="string2">Artist: </label>
-				<input type="text" id="string2" readonly>
 				<label for="numbox1">Number: </label>
 				<input type="number" id="numbox1" readonly>
+				
+				<label for="string1">Title: </label>
+				<input type="text" id="string1" readonly>
+				
+				<label for="string2">Artist: </label>
+				<input type="text" id="string2" readonly>
+				
+				<label for="string3">Top Genre: </label>
+				<input type="text" id="string3" readonly>
+				
+				<label for="numbox2">Date created: </label>
+				<input type="number" id="numbox2" readonly>
+				
+				<label for="string4">Date added to playlist: </label>
+				<input type="text" id="string4" readonly>
+				
 				<label for="checkbox1">Show Date: </label>
 				<input type="checkbox" id="checkbox1">
-				<select id="catalog">
-					<option>Option 1</option>
+				
+				<label for="catalog">Rating: </label>
+				<select id="catalog"> <!-- some sort of rating system??? from 1-10--!>
+					<option> </option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+					<option>6</option>
+					<option>7</option>
+					<option>8</option>
+					<option>9</option>
+					<option>10</option>
 				</select>
-				<input type="text" id="imagepath">
+				
+				<!--<input type="text" id="imagepath">--!>
 			</div>
 			
 			<div id="menu">
 				<input type="button" id="beginning" value="|<" onclick="GetData(0)">
 				<input type="button" id="previous" value="<" onclick="GetPrevious()">
 				<input type="button" id="next" value=">" onclick="GetNext()">
-				<input type="button" id="ending" value=">|" onclick="GetData(4)"> <!--4 is a placeholder, TODO: change -->
+				<input type="button" id="ending" value=">|"> 
 				<br>
 				<div id="navbar">
 					<input type="text" id="moveTo" value="1">
@@ -47,22 +72,28 @@
 				<input type="button" id="delete" value="Delete" onclick ="GetDelete()">
 				<input type="button" id="edit" value="Edit" onclick="GetEdit()">
 				<input type="button" id="save" value="Save" onclick="SaveData()">
-				<input type="button" id="saveall" value="Save All">
+				<input type="button" id="saveall" value="Export" onclick="JSONsave()">
+				<input type="button" id="load" value="Import" onclick="JSONload()">
 			</div>
 		</form>
 
 		<script>
 			var httpRequest;
+			let httpRequestData;
 			let httpRequestMax;
 			let iterator = 0;
 			let maximum;
 			let insertToggle = 0;
+			//let pValStatus = new Map();
 
 			function startFunc() {
 				//GetData(iterator); //we want to see the first elem in array
 				//GetMaximum();
 				init_db_table();
 				GetData(iterator);
+				GetMaximum();
+				//the following function takes the map, saves whether an element has been deleted or is safe.
+				//pValScan();
 			}
 			function init_db_table() {
 				httpRequest = new XMLHttpRequest();
@@ -93,7 +124,7 @@
 					alert('Caught Exception: ' + e.description);
 				}
 			}
-			/*
+			
 			function GetMaximum() {
 				httpRequestMax = new XMLHttpRequest();
 				if (!httpRequest) { // check if the object was properly created
@@ -127,61 +158,76 @@
 				}
 			}
 			function GetNext() {
-				if (iterator != maximum-1) {
+				if (iterator < maximum-1) {
 					iterator++;
+				}
+				//while(iterator < maximum && pValStatus.get(iterator) === "deleted") iterator++;
+				if (iterator <= maximum) {
 					GetData(iterator);
 				}
+				//console.log(iterator);
 			}
 			function GetPrevious() {
-				if(iterator != 0) {
+				if(iterator > 0) {
 					iterator--;
+				}
+				//while(iterator >= 0 && pValStatus.get(iterator) === "deleted") iterator--;
+				if(iterator >= 0) {
 					GetData(iterator);
 				}
+				//console.log(iterator);
 			}
-			*/
+			
+			
 			function GetData(i) {
 				iterator = i; //just in case we get sent to 0, end
-				httpRequest = new XMLHttpRequest();
+				httpRequestData = new XMLHttpRequest();
 				if (!httpRequest) { // check if the object was properly created
 					// issues with the browser, example: old browser
 					alert('Cannot create an XMLHTTP instance');
 					return false;
 				}
-				httpRequest.onreadystatechange = SetItem; // we assign a function to the property onreadystatechange (callback function)
-				httpRequest.open('POST', 'GetItem.php'); // ACTION + (string containing address of the file + parameters if needed)
-				httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-				httpRequest.send('i=' + i); // POST = send with parameter (the string with the relevant information)
+				httpRequestData.onreadystatechange = SetItem; // we assign a function to the property onreadystatechange (callback function)
+				httpRequestData.open('POST', 'GetItem.php'); // ACTION + (string containing address of the file + parameters if needed)
+				httpRequestData.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				httpRequestData.send('i=' + i); // POST = send with parameter (the string with the relevant information)
 				//top line might not be needed?
 				//No, how else would we send the iterator?
 			}
 			function SetItem() {
 				try {
-					if (httpRequest.readyState === XMLHttpRequest.DONE) {
-						if (httpRequest.status === 200) {
+					if (httpRequestData.readyState === XMLHttpRequest.DONE) {
+						if (httpRequestData.status === 200) {
 							//What we want to do: 
 							//Change the form's data to view what we want to see.
 							//Updates: everything in first box, Page number.
 							//alert("Response Text: " + httpRequest.responseText);
-							let response = JSON.parse(httpRequest.responseText);
+							//console.log(httpRequestData.responseText);
+							let response = JSON.parse(httpRequestData.responseText);
 							
 							if(!response.error) {
 								//do the Updates here.
+								document.getElementById("numbox1").value = response.sel;
 								document.getElementById("string1").value = response.title;
 								document.getElementById("string2").value = response.artist;
-								document.getElementById("numbox1").value = response.sel;
+								document.getElementById("string3").value = response.top_genre;
+								document.getElementById("numbox2").value = response.year;
+								document.getElementById("string4").value = response.added;
+								
 								
 								document.getElementById("moveTo").value = iterator+1;
 							}
 							else alert(response.error);
+							
 						} else {
 							alert('There was a problem with the request.');
 						}
 					}
 				} catch (e) { // Always deal with what can happen badly, client-server applications --> there is always something that can go wrong on one end of the connection
-					alert('Caught Exception: ' + e.description);
+					alert('Caught Exception in GetData: ' + e.description);
 				}
 			}
-			/*
+			
 			function GetInsert() {
 				//the only thing this function will do, is change all elements to no longer be readonly.
 				//It will:
@@ -192,18 +238,30 @@
 				//The user can then save their inserted entry by pressing "save".
 				
 				//Insert/Cancel Toggle
+				if (document.getElementById("numbox1").hasAttribute('readonly')) document.getElementById("numbox1").removeAttribute('readonly');
+				else document.getElementById("numbox1").setAttribute('readonly', 'readonly');
 				if (document.getElementById("string1").hasAttribute('readonly')) document.getElementById("string1").removeAttribute('readonly');
 				else document.getElementById("string1").setAttribute('readonly', 'readonly');
 				if (document.getElementById("string2").hasAttribute('readonly')) document.getElementById("string2").removeAttribute('readonly');
 				else document.getElementById("string2").setAttribute('readonly', 'readonly');
-				if (document.getElementById("numbox1").hasAttribute('readonly')) document.getElementById("numbox1").removeAttribute('readonly');
-				else document.getElementById("numbox1").setAttribute('readonly', 'readonly');
+				if (document.getElementById("string3").hasAttribute('readonly')) document.getElementById("string3").removeAttribute('readonly');
+				else document.getElementById("string3").setAttribute('readonly', 'readonly');
+				if (document.getElementById("numbox2").hasAttribute('readonly')) document.getElementById("numbox2").removeAttribute('readonly');
+				else document.getElementById("numbox2").setAttribute('readonly', 'readonly');
+				if (document.getElementById("string4").hasAttribute('readonly')) document.getElementById("string4").removeAttribute('readonly');
+				else document.getElementById("string4").setAttribute('readonly', 'readonly');
+
+				
 				if (document.getElementById("insert").value === "Insert") { 
 				
 					//empty imputs
+					document.getElementById("numbox1").value ="";
 					document.getElementById("string1").value ="";
 					document.getElementById("string2").value ="";
-					document.getElementById("numbox1").value ="";
+					document.getElementById("string3").value ="";
+					document.getElementById("numbox2").value ="";
+					document.getElementById("string4").value ="";
+					
 					
 					//toggle moveTo and buttons off.
 					document.getElementById("moveTo").setAttribute('readonly', 'readonly');
@@ -250,12 +308,18 @@
 				//in case user wants to cancel edits, old values are saved.
 				
 				//toggles readonly in inputs
+				if (document.getElementById("numbox1").hasAttribute('readonly')) document.getElementById("numbox1").removeAttribute('readonly');
+				else document.getElementById("numbox1").setAttribute('readonly', 'readonly');
 				if (document.getElementById("string1").hasAttribute('readonly')) document.getElementById("string1").removeAttribute('readonly');
 				else document.getElementById("string1").setAttribute('readonly', 'readonly');
 				if (document.getElementById("string2").hasAttribute('readonly')) document.getElementById("string2").removeAttribute('readonly');
 				else document.getElementById("string2").setAttribute('readonly', 'readonly');
-				if (document.getElementById("numbox1").hasAttribute('readonly')) document.getElementById("numbox1").removeAttribute('readonly');
-				else document.getElementById("numbox1").setAttribute('readonly', 'readonly');
+				if (document.getElementById("string3").hasAttribute('readonly')) document.getElementById("string3").removeAttribute('readonly');
+				else document.getElementById("string3").setAttribute('readonly', 'readonly');
+				if (document.getElementById("numbox2").hasAttribute('readonly')) document.getElementById("numbox2").removeAttribute('readonly');
+				else document.getElementById("numbox2").setAttribute('readonly', 'readonly');
+				if (document.getElementById("string4").hasAttribute('readonly')) document.getElementById("string4").removeAttribute('readonly');
+				else document.getElementById("string4").setAttribute('readonly', 'readonly');
 				
 				
 				//if user is cancelling, revert changes.
@@ -269,6 +333,9 @@
 					document.getElementById("next").disabled = true;
 					document.getElementById("ending").disabled = true;
 					document.getElementById("insert").disabled = true;
+					document.getElementById("delete").disabled = true;
+					document.getElementById("saveall").disabled = true;
+					document.getElementById("load").disabled = true;
 					
 					document.getElementById("edit").value = "Cancel";
 					
@@ -285,29 +352,49 @@
 					document.getElementById("next").disabled = false;
 					document.getElementById("ending").disabled = false;
 					document.getElementById("insert").disabled = false;
+					document.getElementById("delete").disabled = false;
+					document.getElementById("saveall").disabled = false;
+					document.getElementById("load").disabled = false;
 					
 					document.getElementById("edit").value = "Edit";
 				}
 			}
+			//TODO:
+			/*
+			Save option box into database?
+			
+			What is left?
+			
+			More Styling?
+			
+			make boolean checkmark print out uploaded images if it's on or off?
+			
+			Add the delete pkey reset lines in INSERT as well just in case?
+			*/
+			
 			function SaveData() {
 				if(insertToggle) {
-					iterator = maximum;
-					maximum++;
+					iterator = maximum + 1;
 				}
 				httpRequest = new XMLHttpRequest();
 				
+				var n1 = document.getElementById("numbox1").value;
 				var s1 = document.getElementById("string1").value;
 				var s2 = document.getElementById("string2").value;
-				var n1 = document.getElementById("numbox1").value;
-				alert(s1);
-				alert(s2);
-				alert(n1);
+				var s3 = document.getElementById("string3").value;
+				var n2 = document.getElementById("numbox2").value;
+				var n3 = document.getElementById("string4").value;
+				
+				
+				//alert(s1);
+				//alert(s2);
+				//alert(n1);
 				if (!httpRequest) { // check if the object was properly created
 					// issues with the browser, example: old browser
 					alert('Cannot create an XMLHTTP instance');
 					return false;
 				}
-				const params = `i=${encodeURIComponent(iterator)}&s1=${encodeURIComponent(s1)}&s2=${encodeURIComponent(s2)}&n1=${encodeURIComponent(n1)}`; //encodes needed params in string.
+				const params = `i=${encodeURIComponent(iterator)}&s1=${encodeURIComponent(s1)}&s2=${encodeURIComponent(s2)}&s3=${encodeURIComponent(s3)}&n1=${encodeURIComponent(n1)}&n2=${encodeURIComponent(n2)}&n3=${encodeURIComponent(n3)}&maximum=${encodeURIComponent(maximum)}`; //encodes needed params in string.
 				
 				//perhaps bottom line not needed, as long as we're only saving data and not displaying.
 				httpRequest.onreadystatechange = SetEdit; // we assign a function to the property onreadystatechange (callback function)
@@ -319,14 +406,20 @@
 				try {
 					if (httpRequest.readyState === XMLHttpRequest.DONE) {
 						if (httpRequest.status === 200) {
-							let response = JSON.parse(httpRequest.responseText);
-							alert(response.message);
+							console.log(httpRequest.responseText);
+							//let response = JSON.parse(httpRequest.responseText);
+							//alert(response.message);
+							
 							if (document.getElementById("edit").value === "Cancel") {
 								//now we reset everything back to readonly, and let navbar be changed.
 								//readonly inputs
+								document.getElementById("numbox1").setAttribute('readonly', 'readonly');
 								document.getElementById("string1").setAttribute('readonly', 'readonly');
 								document.getElementById("string2").setAttribute('readonly', 'readonly');
-								document.getElementById("numbox1").setAttribute('readonly', 'readonly');
+								document.getElementById("string3").setAttribute('readonly', 'readonly');
+								document.getElementById("numbox2").setAttribute('readonly', 'readonly');
+								document.getElementById("string4").setAttribute('readonly', 'readonly');
+								
 								//toggle moveTo and buttons back on.
 								document.getElementById("moveTo").removeAttribute('readonly');
 								document.getElementById("beginning").disabled = false;
@@ -340,9 +433,12 @@
 							else if (document.getElementById("insert").value === "Cancel") {
 								//now we reset everything back to readonly, and let navbar be changed.
 								//readonly inputs
+								document.getElementById("numbox1").setAttribute('readonly', 'readonly');
 								document.getElementById("string1").setAttribute('readonly', 'readonly');
 								document.getElementById("string2").setAttribute('readonly', 'readonly');
-								document.getElementById("numbox1").setAttribute('readonly', 'readonly');
+								document.getElementById("string3").setAttribute('readonly', 'readonly');
+								document.getElementById("numbox2").setAttribute('readonly', 'readonly');
+								document.getElementById("string4").setAttribute('readonly', 'readonly');
 								//toggle moveTo and buttons back on.
 								document.getElementById("moveTo").removeAttribute('readonly');
 								document.getElementById("beginning").disabled = false;
@@ -352,7 +448,10 @@
 								document.getElementById("edit").disabled = false;
 								
 								document.getElementById("insert").value = "Insert";
-								GetMaximum();
+								console.log('Maximum before: ', maximum);
+								var pseudomax = maximum;
+								GetMaximum(); //can't use maximum for this reason.
+								GetData(pseudomax);
 							}
 							
 						} else {
@@ -360,9 +459,11 @@
 						}
 					}
 				} catch (e) { // Always deal with what can happen badly, client-server applications --> there is always something that can go wrong on one end of the connection
-					alert('Caught Exception: ' + e.description);
+					alert('Caught Exception save: ' + e.description);
 				}
 			}
+			
+			
 			function GetDelete() {
 				if(confirm('Are you sure you want to delete this entry?')) {
 					httpRequest = new XMLHttpRequest();
@@ -380,13 +481,19 @@
 					//do nothing.
 					console.log('Entry deletion cancelled');
 				}
-				
 			}
 			function SetDelete() {
 				try {
 					if (httpRequest.readyState === XMLHttpRequest.DONE) {
 						if (httpRequest.status === 200) {
 							alert('Deletion completed successfully.');
+							/*pValStatus.set(iterator, "deleted");
+							
+							pValStatus.forEach((value, key) => {
+								console.log(key, ':', value);
+							});
+							iterOffset++; //subtract this from iter for smooth textbox navigation
+							*/
 							if(iterator != 0) GetPrevious();
 							else GetNext();
 							GetMaximum();
@@ -398,6 +505,89 @@
 					alert('Caught Exception: ' + e.description);
 				}
 			}
+			function JSONsave() {
+				httpRequest = new XMLHttpRequest();
+				if (!httpRequest) { // check if the object was properly created
+					// issues with the browser, example: old browser
+					alert('Cannot create an XMLHTTP instance');
+					return false;
+				}
+				httpRequest.onreadystatechange = SetJSON; // we assign a function to the property onreadystatechange (callback function)
+				httpRequest.open('POST', 'JSONsave.php'); // ACTION + (string containing address of the file + parameters if needed)
+				httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				httpRequest.send();
+			}
+			function SetJSON() {
+				try {
+					if (httpRequest.readyState === XMLHttpRequest.DONE) {
+						alert(httpRequest.responseText);
+						//GetData(0); we don't really need to move. just update a json file
+						//GetMaximum();
+					}
+				} catch (e) { // Always deal with what can happen badly, client-server applications --> there is always something that can go wrong on one end of the connection
+					alert('Caught Exception: ' + e.description);
+				}
+			}
+			function JSONload() {
+				httpRequest = new XMLHttpRequest();
+				if (!httpRequest) { // check if the object was properly created
+					// issues with the browser, example: old browser
+					alert('Cannot create an XMLHTTP instance');
+					return false;
+				}
+				httpRequest.onreadystatechange = GetJSON; // we assign a function to the property onreadystatechange (callback function)
+				httpRequest.open('POST', 'JSONload.php'); // ACTION + (string containing address of the file + parameters if needed)
+				httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				httpRequest.send();
+			}
+			function GetJSON() {
+				try {
+					if (httpRequest.readyState === XMLHttpRequest.DONE) {
+						alert(httpRequest.responseText);
+						GetData(0);
+						GetMaximum();
+					}
+				} catch (e) { // Always deal with what can happen badly, client-server applications --> there is always something that can go wrong on one end of the connection
+					alert('Caught Exception: ' + e.description);
+				}
+			}
+			/*
+			function pValScan() {
+				httpRequest = new XMLHttpRequest();
+				if (!httpRequest) { // check if the object was properly created
+					// issues with the browser, example: old browser
+					alert('Cannot create an XMLHTTP instance');
+					return false;
+				}
+				httpRequest.onreadystatechange = SetpVal; // we assign a function to the property onreadystatechange (callback function)
+				httpRequest.open('POST', 'ScanTable.php'); // ACTION + (string containing address of the file + parameters if needed)
+				httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				httpRequest.send();
+			}
+			function SetpVal() {
+				try {
+					if (httpRequest.readyState === XMLHttpRequest.DONE) {
+						if (httpRequest.status === 200) {
+							//if it returned correctly, we can now modify the pVal map
+							console.log(httpRequest.responseText);	
+							let response = JSON.parse(httpRequest.responseText); //all pKeys
+							var pKeyMissing = 1;
+							for(var pKey of response) {
+								pValStatus.set(pKey, "safe");
+								if(pKeyMissing != pKey) pValStatus.set(pKey, "deleted");
+								pKeyMissing++;
+							}
+							pValStatus.forEach((value, key) => {
+								console.log(key, ':', value);
+							});
+						} else {
+							alert('There was a problem with the request.');
+						}
+					}
+				} catch (e) { // Always deal with what can happen badly, client-server applications --> there is always something that can go wrong on one end of the connection
+					alert('Caught Exception a: ' + e.description);
+				}
+			}
 			*/
 			//lines below, make the page number textbox have input functionality.
 			document.getElementById("moveTo").onkeydown = function(e) {
@@ -405,6 +595,9 @@
 					var enterCompatibility = document.getElementById("moveTo").value;
 					GetData(enterCompatibility-1);
 				}
+			}
+			document.getElementById("ending").onclick = function() {
+				GetData(maximum-1);
 			}
 		</script>
 	</body>

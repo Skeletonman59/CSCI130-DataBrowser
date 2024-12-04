@@ -13,7 +13,7 @@
 	}
 
 	// Class for the form Entry,
-	class Entry {
+	class Entry implements JsonSerializable{
 		private $sel;
 		private $title;
 		private $artist;
@@ -27,7 +27,7 @@
 			$this->SetArtist(generateRandomString());
 			$this->SetTopGenre(generateRandomString());
 			$this->SetYear(strval(rand(1800,2024)));
-			$this->SetAdded(strval(rand(2008,2024)));
+			$this->SetAdded(generateRandomString());
 			
 		}
 		
@@ -44,5 +44,20 @@
 		public function SetTopGenre($input) {  $this->top_genre=$input; }
 		public function SetYear($input) {  $this->year=$input; }
 		public function SetAdded($input) {  $this->added=$input; }
+		
+		public function JsonSerializable() { //this is needed for JSON outputs
+			return get_object_vars($this);
+		}
+
+		public function JsonSerialize(): mixed {
+			return [
+				'sel' =>$this->sel,
+				'title' =>$this->title,
+				'artist' =>$this->artist,
+				'top_genre' =>$this->top_genre,
+				'year' =>$this->year,
+				'added' =>$this->added,
+			];
+		}
 	}
 ?>

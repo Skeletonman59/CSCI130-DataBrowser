@@ -4,6 +4,7 @@
 	error_reporting(E_ALL);
 
 	include 'FormEntry.php';
+	include 'usernameCHANGE.php'; //so that localhost/username/passwords are reused
 	
 	echo "Create some Entries<br>";
 	$n=10;
@@ -11,11 +12,6 @@
 	for ($i=0;$i<$n;$i++) {
 		$a0[$i]=new Entry();
 	}
-	
-	$servername = "localhost"; 	// default server name
-	$username = "Marco"; 	// user name that you created
-	$password = "Polo";		// password that you created
-	$dbname = "dayta_bais";
 	
 	// Create connection
 	$conn = new mysqli($servername, $username, $password);
@@ -27,9 +23,9 @@
 	echo "Connected successfully <br>";
 	
 	// Creation of the database
-	$sql = "CREATE DATABASE ". $dbname;
+	$sql = "CREATE DATABASE IF NOT EXISTS ". $dbname;
 	if ($conn->query($sql) === TRUE) {
-		echo "Database ". $dbname ." created successfully<br>";
+		echo "Database ". $dbname ." exists now.<br>";
 	} else {
 		echo "Error creating database: " . $conn->error ."<br>";
 	}
@@ -43,7 +39,7 @@
 		die("Connection failed: " . $conn->connect_error);
 	} 
 		
-	$sql = "CREATE TABLE Entry (
+	$sql = "CREATE TABLE IF NOT EXISTS Entry (
 	pkey INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 	sel  INT(5) NOT NULL,
 	title   VARCHAR(30) NOT NULL,
@@ -60,7 +56,8 @@
 		echo "Error creating table: " . $conn->error ."<br>";
 	}
 	
-	
+	//This was only to get us started.
+	/*
 	$stmt = $conn->prepare("INSERT INTO Entry (sel, title, artist,top_genre,year,added) VALUES (?,?,?,?,?,?)");
 	if ($stmt==FALSE) {
 		echo "There is a problem with prepare <br>";
@@ -79,7 +76,7 @@
 		$stmt->execute();
 		echo "New record ". $i ." created successfully<br>";
 	}
-
+	*/
 	$stmt->close();
 
 	// close the connection
