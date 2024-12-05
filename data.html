@@ -38,18 +38,18 @@
 				<input type="checkbox" id="checkbox1">
 				
 				<label for="catalog">Rating: </label>
-				<select id="catalog"> <!-- some sort of rating system??? from 1-10--!>
+				<select id="rating"> <!-- some sort of rating system??? from 1-10--!>
 					<option> </option>
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-					<option>5</option>
-					<option>6</option>
-					<option>7</option>
-					<option>8</option>
-					<option>9</option>
-					<option>10</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
 				</select>
 				
 				<!--<input type="text" id="imagepath">--!>
@@ -90,8 +90,13 @@
 				//GetData(iterator); //we want to see the first elem in array
 				//GetMaximum();
 				init_db_table();
+				document.getElementById("rating").setAttribute('disabled', 'disabled');
+				
+				/*the two functions below are no longer necessary, 
+				imports and exports are how we initially load data
 				GetData(iterator);
 				GetMaximum();
+				*/
 				//the following function takes the map, saves whether an element has been deleted or is safe.
 				//pValScan();
 			}
@@ -204,7 +209,7 @@
 							//alert("Response Text: " + httpRequest.responseText);
 							//console.log(httpRequestData.responseText);
 							let response = JSON.parse(httpRequestData.responseText);
-							
+
 							if(!response.error) {
 								//do the Updates here.
 								document.getElementById("numbox1").value = response.sel;
@@ -213,6 +218,8 @@
 								document.getElementById("string3").value = response.top_genre;
 								document.getElementById("numbox2").value = response.year;
 								document.getElementById("string4").value = response.added;
+								document.getElementById("rating").value = response.rating;
+								//console.log(response.rating);
 								
 								
 								document.getElementById("moveTo").value = iterator+1;
@@ -250,6 +257,8 @@
 				else document.getElementById("numbox2").setAttribute('readonly', 'readonly');
 				if (document.getElementById("string4").hasAttribute('readonly')) document.getElementById("string4").removeAttribute('readonly');
 				else document.getElementById("string4").setAttribute('readonly', 'readonly');
+				if (document.getElementById("rating").hasAttribute('disabled')) document.getElementById("rating").removeAttribute('disabled');
+				else document.getElementById("rating").setAttribute('disabled', 'disabled');
 
 				
 				if (document.getElementById("insert").value === "Insert") { 
@@ -261,6 +270,8 @@
 					document.getElementById("string3").value ="";
 					document.getElementById("numbox2").value ="";
 					document.getElementById("string4").value ="";
+					document.getElementById("rating").value ="";
+					
 					
 					
 					//toggle moveTo and buttons off.
@@ -270,6 +281,9 @@
 					document.getElementById("next").disabled = true;
 					document.getElementById("ending").disabled = true;
 					document.getElementById("edit").disabled = true;
+					document.getElementById("delete").disabled = true;
+					document.getElementById("saveall").disabled = true;
+					document.getElementById("load").disabled = true;
 					
 					insertToggle = 1;
 					document.getElementById("insert").value = "Cancel";
@@ -287,6 +301,9 @@
 					document.getElementById("next").disabled = false;
 					document.getElementById("ending").disabled = false;
 					document.getElementById("edit").disabled = false;
+					document.getElementById("delete").disabled = false;
+					document.getElementById("saveall").disabled = false;
+					document.getElementById("load").disabled = false;
 					
 					insertToggle = 0;
 					document.getElementById("insert").value = "Insert";
@@ -320,6 +337,8 @@
 				else document.getElementById("numbox2").setAttribute('readonly', 'readonly');
 				if (document.getElementById("string4").hasAttribute('readonly')) document.getElementById("string4").removeAttribute('readonly');
 				else document.getElementById("string4").setAttribute('readonly', 'readonly');
+				if (document.getElementById("rating").hasAttribute('disabled')) document.getElementById("rating").removeAttribute('disabled');
+				else document.getElementById("rating").setAttribute('disabled', 'disabled');
 				
 				
 				//if user is cancelling, revert changes.
@@ -361,10 +380,10 @@
 			}
 			//TODO:
 			/*
-			Save option box into database?
 			
 			What is left?
 			
+			Idea of what is going on with insert data increment: iter = 5, + 1 = 6? wrong, now its 51 bcs 5.1
 			More Styling?
 			
 			make boolean checkmark print out uploaded images if it's on or off?
@@ -383,8 +402,8 @@
 				var s2 = document.getElementById("string2").value;
 				var s3 = document.getElementById("string3").value;
 				var n2 = document.getElementById("numbox2").value;
-				var n3 = document.getElementById("string4").value;
-				
+				var s4 = document.getElementById("string4").value;
+				var rating = document.getElementById("rating").value;
 				
 				//alert(s1);
 				//alert(s2);
@@ -394,7 +413,7 @@
 					alert('Cannot create an XMLHTTP instance');
 					return false;
 				}
-				const params = `i=${encodeURIComponent(iterator)}&s1=${encodeURIComponent(s1)}&s2=${encodeURIComponent(s2)}&s3=${encodeURIComponent(s3)}&n1=${encodeURIComponent(n1)}&n2=${encodeURIComponent(n2)}&n3=${encodeURIComponent(n3)}&maximum=${encodeURIComponent(maximum)}`; //encodes needed params in string.
+				const params = `i=${encodeURIComponent(iterator)}&s1=${encodeURIComponent(s1)}&s2=${encodeURIComponent(s2)}&s3=${encodeURIComponent(s3)}&n1=${encodeURIComponent(n1)}&n2=${encodeURIComponent(n2)}&s4=${encodeURIComponent(s4)}&rating=${encodeURIComponent(rating)}&maximum=${encodeURIComponent(maximum)}`; //encodes needed params in string.
 				
 				//perhaps bottom line not needed, as long as we're only saving data and not displaying.
 				httpRequest.onreadystatechange = SetEdit; // we assign a function to the property onreadystatechange (callback function)
@@ -419,6 +438,7 @@
 								document.getElementById("string3").setAttribute('readonly', 'readonly');
 								document.getElementById("numbox2").setAttribute('readonly', 'readonly');
 								document.getElementById("string4").setAttribute('readonly', 'readonly');
+								document.getElementById("rating").setAttribute('disabled', 'disabled');
 								
 								//toggle moveTo and buttons back on.
 								document.getElementById("moveTo").removeAttribute('readonly');
@@ -427,6 +447,9 @@
 								document.getElementById("next").disabled = false;
 								document.getElementById("ending").disabled = false;
 								document.getElementById("insert").disabled = false;
+								document.getElementById("delete").disabled = false;
+								document.getElementById("saveall").disabled = false;
+								document.getElementById("load").disabled = false;
 								
 								document.getElementById("edit").value = "Edit";
 							}
@@ -439,6 +462,7 @@
 								document.getElementById("string3").setAttribute('readonly', 'readonly');
 								document.getElementById("numbox2").setAttribute('readonly', 'readonly');
 								document.getElementById("string4").setAttribute('readonly', 'readonly');
+								document.getElementById("rating").setAttribute('disabled', 'disabled');
 								//toggle moveTo and buttons back on.
 								document.getElementById("moveTo").removeAttribute('readonly');
 								document.getElementById("beginning").disabled = false;
@@ -446,6 +470,10 @@
 								document.getElementById("next").disabled = false;
 								document.getElementById("ending").disabled = false;
 								document.getElementById("edit").disabled = false;
+								document.getElementById("insert").disabled = false;
+								document.getElementById("delete").disabled = false;
+								document.getElementById("saveall").disabled = false;
+								document.getElementById("load").disabled = false;
 								
 								document.getElementById("insert").value = "Insert";
 								console.log('Maximum before: ', maximum);

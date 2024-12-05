@@ -20,6 +20,7 @@
 		private $top_genre;
 		private $year;
 		private $added;
+		private $rating;
 		
 		function __construct() {
 			$this->SetSel(strval(rand(0,10000)));
@@ -28,6 +29,7 @@
 			$this->SetTopGenre(generateRandomString());
 			$this->SetYear(strval(rand(1800,2024)));
 			$this->SetAdded(generateRandomString());
+			$this->SetRating("");
 			
 		}
 		
@@ -37,6 +39,7 @@
 		public function GetTopGenre() { return $this->top_genre; }
 		public function GetYear() { return $this->year; }
 		public function GetAdded() { return $this->added; }
+		public function GetRating() { return $this->rating; }
 		
 		public function SetSel($input) {  $this->sel=$input; }
 		public function SetTitle($input) {  $this->title=$input; }
@@ -44,6 +47,7 @@
 		public function SetTopGenre($input) {  $this->top_genre=$input; }
 		public function SetYear($input) {  $this->year=$input; }
 		public function SetAdded($input) {  $this->added=$input; }
+		public function SetRating($input) {  $this->rating=$input; }
 		
 		public function JsonSerializable() { //this is needed for JSON outputs
 			return get_object_vars($this);
@@ -57,6 +61,7 @@
 				'top_genre' =>$this->top_genre,
 				'year' =>$this->year,
 				'added' =>$this->added,
+				'rating'=> $this->rating,
 			];
 		}
 	}

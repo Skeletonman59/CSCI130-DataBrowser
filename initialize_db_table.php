@@ -46,8 +46,10 @@
 	artist VARCHAR(30) NOT NULL,
 	top_genre VARCHAR(30) NOT NULL,
 	year INT(4) NOT NULL,
-	added VARCHAR(10) NOT NULL
+	added VARCHAR(10) NOT NULL,
+	rating INT(1) 
 	)";
+	//rating is optional
 	
 	
 	if ($conn->query($sql) === TRUE) {

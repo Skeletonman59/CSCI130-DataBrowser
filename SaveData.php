@@ -13,28 +13,27 @@
 	$s3  = $_POST['s3']; //genre
 	$n2  = $_POST['n2']; //year
 	$s4  = $_POST['s4']; //added
-	
-	
+	$rating  = $_POST['rating']; //rating
 	
 	$maximum = $_POST['maximum'];
 	
 	
 	if($i >=0 && $i <= $maximum) { //Editing, UPDATE
-		$sql = "UPDATE Entry SET sel = ?, title = ?, artist = ?, top_genre = ?, year = ?, added = ? WHERE pKey = ?";
+		$sql = "UPDATE Entry SET sel = ?, title = ?, artist = ?, top_genre = ?, year = ?, added = ?, rating = ? WHERE pKey = ?";
 		$stmt = $conn->prepare($sql);
 		if (!$stmt) die("Statement hates change :(" . $conn->error);
 		
 		$i++;
-		$stmt->bind_param("isssisi", $n1, $s1, $s2, $s3, $n2, $s4, $i);
+		$stmt->bind_param("isssisii", $n1, $s1, $s2, $s3, $n2, $s4, $rating, $i);
 		$stmt->execute();
 		echo "Row updated successfully.";
 	}
 	else if($i > $maximum) { //Inserting, INSERT INTO
-		$sql = "INSERT INTO Entry (sel, title, artist, genre, year, added) VALUES (?, ?, ?, ?, ?, ?)";
+		$sql = "INSERT INTO Entry (sel, title, artist, top_genre, year, added, rating) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		$stmt = $conn->prepare($sql);
 		if (!$stmt) die("Statement hates nth wheeling :(" . $conn->error);
 		
-		$stmt->bind_param("isssis", $n1, $s1, $s2, $s3, $n2, $s4);
+		$stmt->bind_param("isssisi", $n1, $s1, $s2, $s3, $n2, $s4, $rating);
 		$stmt->execute();
 		echo "Row added successfully.";
 	}

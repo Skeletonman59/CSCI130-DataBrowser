@@ -13,12 +13,12 @@
 	//if we are have generated a database and table, then just use that empty table.
 	//Not empty? delete everything and then import.
 	$conn->query("TRUNCATE TABLE Entry");
-	$stmt = $conn->prepare("INSERT INTO Entry (sel, title, artist,top_genre,year,added) VALUES (?,?,?,?,?,?)");
+	$stmt = $conn->prepare("INSERT INTO Entry (sel, title, artist,top_genre,year,added, rating) VALUES (?,?,?,?,?,?,?)");
 	if ($stmt==FALSE) {
 		echo "There is a problem with prepare <br>";
 		echo $conn->error; // Need to connect/reconnect before the prepare call otherwise it doesnt work
 	}
-	$stmt->bind_param("isssis", $sel, $title,$artist,$top_genre,$year, $added);
+	$stmt->bind_param("isssisi", $sel, $title,$artist,$top_genre,$year,$added,$rating);
 	
 	foreach($playlist as $row) {
 		$sel = $row['sel'];
@@ -27,6 +27,10 @@
 		$top_genre = $row['top_genre'];
 		$year = $row['year'];
 		$added = $row['added'];
+		
+		// rating can be empty
+		$rating = ($row["rating"] !== null) ? $row["rating"] : ""; // Default to empty string if null
+		//$indx->SetRating($rating);
 		$stmt->execute();
 	}
 	echo "Table successfully imported.";

@@ -29,6 +29,10 @@
 		$indx->SetTopGenre($row["top_genre"]);
 		$indx->SetYear($row["year"]);
 		$indx->SetAdded($row["added"]);
+		//$indx->SetRating($row["rating"]);
+		// Handle NULL for rating
+		$rating = ($row["rating"] !== null) ? $row["rating"] : ""; // Default to empty string if null
+		$indx->SetRating($rating);
 		
 		echo json_encode($indx);
 	}
