@@ -52,6 +52,7 @@
 					<option value="10">10</option>
 				</select>
 				
+				
 				<!--<input type="text" id="imagepath">--!>
 			</div>
 			
@@ -66,15 +67,17 @@
 					<p>/</p>
 					<input type="text" id="maxElements" readonly>
 				</div>
+				
 			</div>
 			<div id="modifyForm">
 				<input type="button" id="insert" value="Insert" onclick="GetInsert()">
 				<input type="button" id="delete" value="Delete" onclick ="GetDelete()">
 				<input type="button" id="edit" value="Edit" onclick="GetEdit()">
 				<input type="button" id="save" value="Save" onclick="SaveData()">
-				<input type="button" id="sortToggle" value="Sort Alphabetically" onclick="SortToggle()">
+				
 			</div>
 			<div id="saveBar">
+				<input type="button" id="sortToggle" value="Sort Alphabetically" onclick="SortToggle()">
 				<input type="button" id="load" value="Import" onclick="JSONload()">
 				<input type="button" id="saveall" value="Export" onclick="JSONsave()">
 				
@@ -396,18 +399,6 @@
 					document.getElementById("edit").value = "Edit";
 				}
 			}
-			//TODO:
-			/*
-			
-			What is left?
-			
-			Idea of what is going on with insert data increment: iter = 5, + 1 = 6? wrong, now its 51 bcs 5.1
-			More Styling?
-			
-			make boolean checkmark print out uploaded images if it's on or off?
-			
-			Add the delete pkey reset lines in INSERT as well just in case?
-			*/
 			
 			function SaveData() {
 				if(insertToggle) {
