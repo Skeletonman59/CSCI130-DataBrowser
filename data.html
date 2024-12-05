@@ -72,8 +72,12 @@
 				<input type="button" id="delete" value="Delete" onclick ="GetDelete()">
 				<input type="button" id="edit" value="Edit" onclick="GetEdit()">
 				<input type="button" id="save" value="Save" onclick="SaveData()">
-				<input type="button" id="saveall" value="Export" onclick="JSONsave()">
+				<input type="button" id="sortToggle" value="Sort Alphabetically" onclick="SortToggle()">
+			</div>
+			<div id="saveBar">
 				<input type="button" id="load" value="Import" onclick="JSONload()">
+				<input type="button" id="saveall" value="Export" onclick="JSONsave()">
+				
 			</div>
 		</form>
 
@@ -84,6 +88,7 @@
 			let iterator = 0;
 			let maximum;
 			let insertToggle = 0;
+			let sortType = 0;
 			//let pValStatus = new Map();
 
 			function startFunc() {
@@ -182,10 +187,24 @@
 				}
 				//console.log(iterator);
 			}
-			
+			function SortToggle() {
+				if (document.getElementById("sortToggle").value === "Sort Alphabetically") {
+					//then we want to sort Alphabetically, change the toggle to on.
+					sortType = 1;
+					document.getElementById("sortToggle").value = "Sort Numerically";
+					GetData(iterator); //want it to take effect immediately
+				}
+				else {
+					//turn the toggle off.
+					sortType = 0;
+					document.getElementById("sortToggle").value = "Sort Alphabetically";
+					GetData(iterator); //want it to take effect immediately
+				}
+			}
 			
 			function GetData(i) {
 				iterator = i; //just in case we get sent to 0, end
+				console.log(i);
 				httpRequestData = new XMLHttpRequest();
 				if (!httpRequest) { // check if the object was properly created
 					// issues with the browser, example: old browser
@@ -195,9 +214,8 @@
 				httpRequestData.onreadystatechange = SetItem; // we assign a function to the property onreadystatechange (callback function)
 				httpRequestData.open('POST', 'GetItem.php'); // ACTION + (string containing address of the file + parameters if needed)
 				httpRequestData.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-				httpRequestData.send('i=' + i); // POST = send with parameter (the string with the relevant information)
-				//top line might not be needed?
-				//No, how else would we send the iterator?
+				httpRequestData.send('i=' + i + '&sortType=' + sortType); // POST = send with parameter (the string with the relevant information)
+				
 			}
 			function SetItem() {
 				try {
@@ -393,7 +411,7 @@
 			
 			function SaveData() {
 				if(insertToggle) {
-					iterator = maximum + 1;
+					iterator = parseInt(maximum) + 1;
 				}
 				httpRequest = new XMLHttpRequest();
 				
@@ -476,11 +494,17 @@
 								document.getElementById("load").disabled = false;
 								
 								document.getElementById("insert").value = "Insert";
-								console.log('Maximum before: ', maximum);
-								var pseudomax = maximum;
-								GetMaximum(); //can't use maximum for this reason.
-								GetData(pseudomax);
+								
 							}
+							if(insertToggle) { //yes, this check isn't needed, we can put contents in elseif, but this somehow feels safer
+								iterator--;
+								GetMaximum();
+								console.log(maximum);
+								GetData(parseInt(maximum--));
+								insertToggle = false;
+							}
+							//iterator--;
+							
 							
 						} else {
 							alert('There was a problem with the request.');

@@ -7,16 +7,16 @@
         "top_genre": "rhode island indie",
         "year": 2019,
         "added": "2024\u201110\u201113",
-        "rating": 5
+        "rating": 0
     },
     {
         "pkey": 2,
         "sel": 2,
-        "title": "Game Over.",
-        "artist": "Goreshit",
-        "top_genre": "chill breakcore",
-        "year": 2013,
-        "added": "2024\u201110\u201111",
+        "title": "Gentleman",
+        "artist": "Venetian Snares",
+        "top_genre": "breakcore",
+        "year": 2008,
+        "added": "2024\u201109\u201118",
         "rating": 2
     },
     {
@@ -48,5 +48,55 @@
         "year": 2019,
         "added": "2024\u201110\u201109",
         "rating": 4
+    },
+    {
+        "pkey": 6,
+        "sel": 6,
+        "title": "The Unknowing",
+        "artist": "Jfarrari",
+        "top_genre": "alternative\/indie",
+        "year": 2023,
+        "added": "2024-10-06",
+        "rating": 0
+    },
+    {
+        "pkey": 7,
+        "sel": 7,
+        "title": "Mutanever",
+        "artist": "Acrnym",
+        "top_genre": "breakcore",
+        "year": 2021,
+        "added": "2024-08-11",
+        "rating": 0
+    },
+    {
+        "pkey": 8,
+        "sel": 8,
+        "title": "I Gotta Feeling",
+        "artist": "Black Eyed Peas",
+        "top_genre": "dance pop",
+        "year": 2009,
+        "added": "2024-06-20",
+        "rating": 0
+    },
+    {
+        "pkey": 9,
+        "sel": 9,
+        "title": "Enjoy The Silence",
+        "artist": "Depeche Mode",
+        "top_genre": "dance rock",
+        "year": 1990,
+        "added": "2024-06-18",
+        "rating": 0
+    },
+    {
+        "pkey": 10,
+        "sel": 10,
+        "title": "What Would I Do?",
+        "artist": "Strawberry Guy",
+        "top_genre": "bedroom pop",
+        "year": 2019,
+        "added": "2024-04-24",
+        "rating": 0
     }
 ]

@@ -10,9 +10,15 @@
 	//echo "Connected successfully <br>";
 	
 	$i = (isset($_POST['i'])) ? (int)$_POST['i'] : 0;
-	$i++;
+	//$i++;
+	$sortType = isset($_POST['sortType']) ? (int)$_POST['sortType'] : 0;
 	
-	$stmt = $conn->prepare("SELECT * FROM Entry WHERE pkey = ?");
+	if($sortType === 0) { 
+		$stmt = $conn->prepare("SELECT * FROM Entry WHERE pkey = ?");
+		$i++; //for some reason, having this only in index sorting works.
+	}
+	else if($sortType === 1)$stmt = $conn->prepare("SELECT * FROM Entry ORDER BY title ASC LIMIT ?, 1"); /*LIMIT ?, 1*/
+	
 	if (!$stmt) die("Statement wasn't ready :(" . $conn->error);
 	//...
 	$stmt->bind_param("i", $i);
@@ -30,7 +36,7 @@
 		$indx->SetYear($row["year"]);
 		$indx->SetAdded($row["added"]);
 		//$indx->SetRating($row["rating"]);
-		// Handle NULL for rating
+		
 		$rating = ($row["rating"] !== null) ? $row["rating"] : ""; // Default to empty string if null
 		$indx->SetRating($rating);
 		
