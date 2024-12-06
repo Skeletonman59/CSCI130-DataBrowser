@@ -9,6 +9,7 @@ How to load:
 
 # Features
 ![image](https://github.com/user-attachments/assets/f926d1fb-8a02-4ba3-bcae-a5255c4409fa)
+
 This is the Navigation Bar. From left to right, they are: "first element in table, previous, next, and final element in table.
 Cool tip: If you know where you want to go, you can also click on the first number shown in the Navigation Bar and change the
 value to whatever entry you want to go to.
