@@ -17,7 +17,7 @@
         "top_genre": "breakcore",
         "year": 2008,
         "added": "2024\u201109\u201118",
-        "rating": 2
+        "rating": 0
     },
     {
         "pkey": 3,
@@ -27,7 +27,7 @@
         "top_genre": "maidcore",
         "year": 2023,
         "added": "2024\u201110\u201111",
-        "rating": 7
+        "rating": 0
     },
     {
         "pkey": 4,
@@ -37,7 +37,7 @@
         "top_genre": "dance rock",
         "year": 1983,
         "added": "2024\u201110\u201111",
-        "rating": 6
+        "rating": 0
     },
     {
         "pkey": 5,
@@ -47,7 +47,7 @@
         "top_genre": "speedrun",
         "year": 2019,
         "added": "2024\u201110\u201109",
-        "rating": 4
+        "rating": 0
     },
     {
         "pkey": 6,
