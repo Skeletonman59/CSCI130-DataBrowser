@@ -4,8 +4,8 @@ Repo for Data Browser project
 - [How to Load](#how-to-load)
 - [Features](#features)
 - [Navigation Bar](#navigation-bar)
-- [Modify Database Table](#modifying-entries)
-- [Modify Table Structure](#modifying-the-table)
+- [Modifying Entries](#modifying-entries)
+- [Modifying the Table](#modifying-the-table)
 - [Missing Features](#missing-features)
 
 # How to load: 
