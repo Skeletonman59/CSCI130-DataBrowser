@@ -11,5 +11,18 @@ How to load:
 ![image](https://github.com/user-attachments/assets/f926d1fb-8a02-4ba3-bcae-a5255c4409fa)
 
 This is the Navigation Bar. From left to right, they are: "first element in table, previous, next, and final element in table.
+
 Cool tip: If you know where you want to go, you can also click on the first number shown in the Navigation Bar and change the
 value to whatever entry you want to go to.
+
+![image](https://github.com/user-attachments/assets/ce769a27-6ca5-4ed6-8dfb-5f81ab5efa2b)
+
+This is bar modifies the database table. You can Insert your own element, Delete an element, and modify an existing entry. Changes are not permanent; you must Save this change afterwards (See below). 
+
+![image](https://github.com/user-attachments/assets/c667c716-2f14-4d30-ab58-415119a141b7)
+
+This area modifies the entire structure of the table. Instead of previewing entries based on an arbitrary index, you can choose to sift through the data Alphabetically. Click the button again (Now titled "Sort Numerically") to go back to index sorting.
+The Import button takes a json in the same folder, titled "table.json", and adds all the elements within to be readable within the data browser. This also puts all your data inside the database table.
+The Export button is your "Save All Changes" button. This modifies the same "table.json" file, and saves any changes you made prior, like insertions, deletions, or modifications. 
+
+
