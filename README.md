@@ -6,6 +6,7 @@ Repo for Data Browser project
 - [Navigation Bar](#navigation-bar)
 - [Modify Database Table](#modifying-entries)
 - [Modify Table Structure](#modifying-the-table)
+- [Missing Features](#missing-features)
 
 # How to load: 
 1. git clone https://github.com/Skeletonman59/178-Project into XAMPP\htdocs\ in cmd
@@ -35,5 +36,8 @@ This area modifies the entire structure of the table. Instead of previewing entr
 The Import button takes a json in the same folder, titled "table.json", and adds all the elements within to be readable within the data browser. This also puts all your data inside the database table.
 
 The Export button is your "Save All Changes" button. This modifies the same "table.json" file, and saves any changes you made prior, like insertions, deletions, or modifications. 
+
+# Missing Features:
+A boolean value in each entry, images for each item, and uploading images to server
 
 
