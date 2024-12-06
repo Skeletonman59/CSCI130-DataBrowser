@@ -31,7 +31,9 @@ This is bar modifies the database table. You can Insert your own element, Delete
 ![image](https://github.com/user-attachments/assets/c667c716-2f14-4d30-ab58-415119a141b7)
 
 This area modifies the entire structure of the table. Instead of previewing entries based on an arbitrary index, you can choose to sift through the data Alphabetically. Click the button again (Now titled "Sort Numerically") to go back to index sorting.
+
 The Import button takes a json in the same folder, titled "table.json", and adds all the elements within to be readable within the data browser. This also puts all your data inside the database table.
+
 The Export button is your "Save All Changes" button. This modifies the same "table.json" file, and saves any changes you made prior, like insertions, deletions, or modifications. 
 
 
